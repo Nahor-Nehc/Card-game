@@ -18,13 +18,15 @@ class hand:
     self.cards.append(card)
 
 class deck:
-  def __init__(self, game: str = "blackjack"):
+  def __init__(self, floors: int = 1, game: str = "blackjack"):
     number = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"]
     if game == "blackjack":
       numberVal = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, "A"]
     suits = ["♣", "♠", "♥", "♦"]
     combinations = list(itertools.product(number, suits))
-    self.unshuffled_deck = [card(combo[0], combo[1], numberVal[number.index(combo[0])]) for combo in combinations]
+    self.unshuffled_deck = [[card(combo[0], combo[1], numberVal[number.index(combo[0])]) for combo in combinations] for floor in range(floors)]
+    self.unshuffled_deck = [item for sublist in self.unshuffled_deck for item in sublist]
+    print(len(self.unshuffled_deck))
     self.deck = self.unshuffled_deck
     self.discard = []
 
@@ -51,25 +53,26 @@ class deck:
     while counter < number:
       for hand in hands:
         if len(self.deck) == 0:
-          raise Exception(f"Deck has ran out of cards. Starting deck had {start_deck_len} cards. Attempted to draw {attempt_draw_len}")
+          raise Exception(f"Deck has ran out of cards. Deck has {start_deck_len} cards. Attempted to draw {attempt_draw_len} cards")
         hand.add_card(self.get_top_card())
         self.discard_top_card()
       counter += 1
 
-test = deck()
+test = deck(6)
 hand1 = hand()
 hand2 = hand()
 hand3 = hand()
 hands = [hand1, hand2, hand3]
-for x in test.deck:
-  x.display()
-test.shuffle()
+# for x in test.deck:
+#   x.display()
+# test.shuffle()
 
-test.deal(10, hands)
-for v_hand in hands:
-  print()
-  for x in v_hand.cards:
-    x.display()
-print()
-for x in test.deck:
-  x.display()
+# test.deal(111, hands)
+
+# for i in hands:
+#   for i2 in i.cards:
+#     i2.display()
+#   print()
+
+# for x in test.deck:
+#   x.display()
